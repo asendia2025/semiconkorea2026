@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASENDIA - SEMICON KOREA 2026 Invitation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Varela+Round&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Noto Sans KR', 'Varela Round', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+            min-height: 100vh;
+        }
+        .text-gradient {
+            background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .envelope-container {
+            perspective: 1000px;
+            cursor: pointer;
+        }
+        .envelope {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            aspect-ratio: 1.6;
+            transition: transform 0.6s ease;
+            transform-style: preserve-3d;
+        }
+        .envelope:hover {
+            transform: translateY(-20px) rotateY(5deg);
+        }
+        .envelope-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border-radius: 12px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border: 2px solid #e2e8f0;
+        }
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            border-radius: 12px 12px 0 0;
+            transform-origin: top;
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+        }
+        .envelope-seal {
+            position: absolute;
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 10;
+            padding: 20px;
+        }
+        .invitation-content {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .invitation-content.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .fade-in {
+            animation: fadeIn 1s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .card-shadow {
+            box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.1);
+        }
+        .hidden {
+            display: none;
+        }
+        .marker-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .lang-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            display: flex;
+            gap: 8px;
+            background: white/90;
+            backdrop-filter: blur(10px);
+            padding: 4px;
+            border-radius: 50px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .lang-btn {
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .lang-btn.active {
+            background: #2563eb;
+            color: white;
+        }
+        .lang-btn:not(.active) {
+            color: #64748b;
+        }
+        .lang-btn:not(.active):hover {
+            background: #f1f5f9;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+
+    <!-- Language Switcher -->
+    <div class="lang-switcher">
+        <a href="index.html" class="lang-btn">KO</a>
+        <a href="index_en.html" class="lang-btn active">EN</a>
+    </div>
+
+    <!-- Envelope Landing Page -->
+    <div id="envelope-page" class="envelope-container fade-in">
+        <div class="text-center mb-12">
+            <h1 class="text-white text-4xl md:text-5xl font-bold mb-4">Your Invitation Has Arrived</h1>
+            <p class="text-slate-300 text-lg">Click the envelope to open</p>
+        </div>
+        
+        <div class="flex justify-center" onclick="openInvitation()">
+            <div class="envelope">
+                <div class="envelope-back">
+                    <!-- Address Labels on Envelope -->
+                    <div class="absolute top-[52%] left-8 right-8">
+                        <div class="mb-4">
+                            <p class="text-xs text-slate-400 mb-1">FROM</p>
+                            <p class="text-lg font-bold text-slate-800">ASENDIA</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-400 mb-1">TO</p>
+                            <p class="text-lg md:text-xl font-bold text-blue-600">Our Valued Partner</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Stamp -->
+                    <div class="absolute bottom-6 right-6">
+                        <div class="w-16 h-16 border-2 border-dashed border-slate-300 rounded flex items-center justify-center">
+                            <span class="text-xs font-bold text-slate-400">2026</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="envelope-flap"></div>
+                <div class="envelope-seal">
+                    <img src="img/logo_company_transparency.png" alt="ASENDIA" class="w-full h-full object-contain">
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center mt-8">
+            <p class="text-slate-400 text-sm">SEMICON KOREA 2026</p>
+            <p class="text-slate-500 text-xs mt-1">2026. 02. 11 - 13</p>
+        </div>
+    </div>
+
+    <!-- Invitation Content Page -->
+    <div id="invitation-page" class="invitation-content w-full max-w-6xl hidden">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <div class="inline-flex items-center px-4 py-2 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 text-sm font-bold mb-6">
+                <span class="flex h-2 w-2 bg-blue-400 rounded-full mr-2 marker-pulse"></span>
+                SEMICON KOREA 2026
+            </div>
+            <h1 class="text-5xl md:text-6xl font-extrabold text-white mb-4">
+                Innovation For Tomorrow
+            </h1>
+            <p class="text-xl text-slate-300 max-w-2xl mx-auto">
+                Experience ASENDIA's innovative RF solutions
+            </p>
+        </div>
+
+        <!-- Welcome Card -->
+        <div class="bg-white/95 backdrop-blur-lg rounded-3xl p-8 md:p-12 mb-8 card-shadow">
+            <div class="flex items-start space-x-4 mb-6">
+                <div class="bg-blue-100 p-3 rounded-2xl">
+                    <i data-lucide="quote" class="w-6 h-6 text-blue-600"></i>
+                </div>
+            </div>
+            
+            <div class="bg-slate-50 rounded-2xl p-6 mb-6">
+                <h2 class="text-2xl md:text-3xl font-bold text-slate-900 mb-6 text-center">
+                    "Join us at the heart of the semiconductor industry,<br>
+                    <span class="text-blue-600">SEMICON Korea</span> in February 2026."
+                </h2>
+                
+                <p class="text-slate-700 leading-relaxed mb-4">
+                    We are excited to share our cutting-edge technological innovations<br>
+                    and showcase our groundbreaking <strong>RF Application Solutions</strong> that will lead the future of the semiconductor industry.
+                </p>
+                <p class="text-slate-700 leading-relaxed">
+                    We cordially invite you to visit our booth and explore new possibilities together, 
+                    sharing our vision for the future.
+                </p>
+            </div>
+
+            <div class="flex items-center justify-between flex-wrap gap-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center p-2">
+                        <img src="img/logo_company_transparency.png" alt="ASENDIA" class="w-full h-full object-contain">
+                    </div>
+                    <div>
+                        <p class="font-bold text-slate-900">ASENDIA Team</p>
+                        <p class="text-xs text-slate-500">RF Application Solutions</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Event Info Grid -->
+        <div class="grid md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white/90 backdrop-blur rounded-2xl p-4 card-shadow">
+                <div class="flex items-center gap-3">
+                    <div class="bg-blue-100 w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <i data-lucide="calendar" class="w-5 h-5 text-blue-600"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-900 text-sm mb-0.5">Date & Time</h3>
+                        <p class="text-slate-600 text-xs">Feb 11(Wed) - 13(Fri), 2026</p>
+                        <p class="text-slate-500 text-xs">10:00 - 17:00</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white/90 backdrop-blur rounded-2xl p-4 card-shadow">
+                <div class="flex items-center gap-3">
+                    <div class="bg-blue-100 w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <i data-lucide="map-pin" class="w-5 h-5 text-blue-600"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-900 text-sm mb-0.5">Venue</h3>
+                        <p class="text-slate-600 text-xs">COEX, Seoul 2F</p>
+                        <p class="text-slate-500 text-xs">Platz Hall</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-4 card-shadow text-white">
+                <div class="flex items-center gap-3">
+                    <div class="bg-white/20 w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <i data-lucide="gift" class="w-5 h-5 text-white"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm mb-0.5">Booth Visit Benefits</h3>
+                        <p class="text-blue-100 text-xs">Gifts & Brochures</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Booth Location -->
+        <div class="bg-white/95 backdrop-blur-lg rounded-3xl p-8 md:p-12 card-shadow">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-slate-900 mb-2">Booth Location</h2>
+                <p class="text-slate-600">Visit us at Platz Hall (2F)</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Map 1 -->
+                <div class="bg-slate-50 rounded-2xl p-4">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-slate-800">COEX Floor Plan</h3>
+                        <span class="bg-white px-3 py-1 rounded-full text-xs font-bold text-slate-600">1F</span>
+                    </div>
+                    <div class="rounded-xl overflow-hidden border-2 border-slate-200">
+                        <img src="img/coax_1f.png" class="w-full h-auto" alt="COEX Map" onerror="this.parentElement.innerHTML='<div class=\'bg-slate-200 aspect-video flex items-center justify-center\'><p class=\'text-slate-400\'>Map Image</p></div>'">
+                    </div>
+                </div>
+
+                <!-- Map 2 - Highlighted -->
+                <div class="bg-gradient-to-br from-blue-50 to-blue-100/50 rounded-2xl p-4 border-2 border-blue-200">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-blue-900">Platz Hall Layout</h3>
+                        <span class="bg-blue-600 px-3 py-1 rounded-full text-xs font-bold text-white">We are here!</span>
+                    </div>
+                    <div class="rounded-xl overflow-hidden border-2 border-blue-300 relative">
+                        <img src="img/jogamdo_3d_title3.png" class="w-full h-auto" alt="Platz Hall Map" onerror="this.parentElement.innerHTML='<div class=\'bg-white aspect-video flex items-center justify-center\'><p class=\'text-slate-400\'>Map Image</p></div>'">
+                        <!-- Location Marker -->
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                            <div class="relative flex h-8 w-8">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-8 w-8 bg-red-500 border-4 border-white shadow-lg"></span>
+                            </div>
+                            <div class="absolute top-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow-xl whitespace-nowrap">
+                                ASENDIA Booth
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 text-center space-y-3">
+                <a href="https://expo.semi.org/korea2026/Public/EventMap.aspx?ID=31064&ShAvailable=1&Thumbnail=1&LangID=1" target="_blank" class="inline-flex items-center text-blue-600 hover:text-blue-700 font-bold text-sm border-b-2 border-blue-600 pb-1">
+                    View Real-time Booth Layout <i data-lucide="external-link" class="ml-2 w-4 h-4"></i>
+                </a>
+                <br>
+                <a href="https://visitor.semiconkorea.org/visitor/regist.asp" target="_blank" class="inline-flex items-center text-blue-600 hover:text-blue-700 font-bold text-sm border-b-2 border-blue-600 pb-1">
+                    Pre-register for SEMICON Korea 2026 <i data-lucide="external-link" class="ml-2 w-4 h-4"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Contact Footer -->
+        <div class="mt-8 bg-slate-800/50 backdrop-blur rounded-3xl p-8 border border-slate-700">
+            <div class="grid md:grid-cols-3 gap-6 text-center md:text-left">
+                <div>
+                    <p class="text-slate-400 text-xs mb-1">Company</p>
+                    <p class="text-white font-bold">ASENDIA</p>
+                </div>
+                <div>
+                    <p class="text-slate-400 text-xs mb-1">Email</p>
+                    <a href="mailto:hdshin@ase-semi.com" class="text-white font-bold hover:text-blue-400">hdshin@ase-semi.com</a>
+                </div>
+                <div>
+                    <p class="text-slate-400 text-xs mb-1">Website</p>
+                    <a href="https://www.asendia-global.com/" target="_blank" class="text-white font-bold hover:text-blue-400">www.asendia-global.com</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Back to Envelope Button -->
+        <div class="text-center mt-8">
+            <button onclick="backToEnvelope()" class="text-slate-400 hover:text-white text-sm flex items-center mx-auto">
+                <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>
+                Back to envelope
+            </button>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        function openInvitation() {
+            const envelopePage = document.getElementById('envelope-page');
+            const invitationPage = document.getElementById('invitation-page');
+            
+            envelopePage.classList.add('hidden');
+            invitationPage.classList.remove('hidden');
+            
+            setTimeout(() => {
+                invitationPage.classList.add('show');
+            }, 50);
+            
+            lucide.createIcons();
+        }
+
+        function backToEnvelope() {
+            const envelopePage = document.getElementById('envelope-page');
+            const invitationPage = document.getElementById('invitation-page');
+            
+            invitationPage.classList.remove('show');
+            
+            setTimeout(() => {
+                invitationPage.classList.add('hidden');
+                envelopePage.classList.remove('hidden');
+            }, 300);
+        }
+    </script>
+</body>
+</html>
